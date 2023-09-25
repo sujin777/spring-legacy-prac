@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.AttachMapper">
+	
+	<!-- ===========select============== -->
+	<select id="getAttachesByBoardNum" resultType="attachVO">
+		<![CDATA[
+			SELECT *
+			FROM attach
+			WHERE board_num = #{boardNum}
+		]]>
+	</select>
+	
+	<select id="getAttachesByUuids" resultType="AttachVO">
+		<![CDATA[
+			SELECT * 
+			FROM attach 
+			WHERE uuid IN
+		]]>
+		<!-- open: 반복문 앞에 쓸 문자열, close: 반복문 끝나고 쓸 문자열 -->
+		<foreach collection="list" item="uuid" open="(" separator="," close=")">
+			#{uuid}
+		</foreach>
+	</select>
+
+	<!-- ===========insert============== -->
+	<insert id="addAttaches">
+		<![CDATA[
+			INSERT INTO attach (uuid, uploadpath, filename, filetype, board_num)
+			VALUES
+		]]>
+		<foreach collection="list" item="attach" separator=",">
+			(#{attach.uuid}, #{attach.uploadpath}, #{attach.filename}, #{attach.filetype}, #{attach.boardNum})
+		</foreach>
+	</insert>
+
+	
+	<!-- ===========update============== -->
+	
+	
+	<!-- ===========delete============== -->
+	<delete id="deleteAttachesByBoardNum">
+		<![CDATA[
+			DELETE FROM attach
+			WHERE board_num = #{boardNum}
+		]]>
+	</delete>
+	
+	<delete id="deleteAttachesByUuids">
+		<![CDATA[
+			DELETE
+			FROM attach
+			WHERE uuid IN
+		]]>
+		<foreach collection="list" item="uuid" open="(" separator="," close=")">
+			#{uuid}
+		</foreach>
+	</delete>
+
+
+</mapper>
